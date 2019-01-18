@@ -1,0 +1,261 @@
+/* custom style css */
+
+@font-face {
+font-family: 'Helvetica Neue UltraLight';
+font-style: normal;
+font-weight: normal;
+src: local('Helvetica Neue UltraLight'), url('HelveticaNeueUltraLight.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue UltraLight Italic';
+font-style: normal;
+font-weight: normal;
+src: local('Helvetica Neue UltraLight Italic'), url('HelveticaNeueUltraLightItal.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Light';
+font-style: normal;
+font-weight: normal;
+src: local('../fonts/Helvetica Neue Light'), url('../fonts/HelveticaNeueLight.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Light Italic';
+font-style: normal;
+font-weight: normal;
+src: local('../fonts/Helvetica Neue Light Italic'), url('../fonts/HelveticaNeueLightItalic.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Bold';
+font-style: normal;
+font-weight: normal;
+src: local('../fonts/Helvetica Neue Bold'), url('../fonts/HelveticaNeueBold.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Condensed Bold';
+font-style: normal;
+font-weight: normal;
+src: local('../fonts/Helvetica Neue Condensed Bold'), url('../fonts/HelveticaNeueCondensedBold.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Bold Italic';
+font-style: normal;
+font-weight: normal;
+src: local('Helvetica Neue Bold Italic'), url('HelveticaNeueBoldItalic.woff') format('woff');
+}
+
+
+@font-face {
+font-family: 'Helvetica Neue Condensed Black';
+font-style: normal;
+font-weight: normal;
+src: local('Helvetica Neue Condensed Black'), url('HelveticaNeueCondensedBlack.woff') format('woff');
+}
+
+body{
+     font-family: 'Helvetica Neue Light';
+}
+
+.header-ttl {
+    text-align: center;
+    font-weight: 600;
+    color: #000000;
+    font-size: 29px;
+    font-family: 'Helvetica Neue Bold';
+}
+.section-header {
+    width: 100%;
+    float: left;
+    padding: 6% 0;
+}
+.header-txt {
+    text-align: center;
+    font-size: 18px;
+    color: #000;
+    font-weight: 600;
+}
+.input-txt {
+    width: 100%;
+    float: left;
+    margin: 10px 0px;
+    height: 30px;
+    padding: 10px;
+    color: #000;
+    border: 1px solid #C6C6C6;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+}
+
+.inputText:focus {
+    border: 2px solid #000;
+}
+.header-txt-2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.btn-login {
+    width: 100%;
+    float: left;
+    margin: 10px 0px;
+    height: 30px;
+    color: #ffff;
+    border: 1px solid #707070;
+    font-size: 14px;
+    background: #C6C6C6;
+    font-weight: 600;
+    transition: 0.4s all ease-in-out;
+}
+.btn-login:hover {
+    border: 1px solid #707070;
+    background: #707070;
+}
+.forgot-txt {
+    text-align: center;
+    clear: both;
+}
+.forgot-txt a {
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000000;
+    border-bottom: 1px solid #000;
+    clear: both;
+    text-decoration: none;
+}
+.input-div {
+    width: 100%;
+    float: left;
+    position: relative;
+}
+ 
+.help-block {
+    color: #f10c0c;
+}
+
+.navbar-default .container {
+width: 1200px;
+}
+
+input:focus ~ .floating-label, input:not(:focus):valid ~ .floating-label {
+    top: 0px;
+    bottom: 10px;
+    left: 3px;
+    opacity: 1;
+    color: #707070;
+}
+
+.inputText {
+  width: 100%;
+    float: left;
+    margin: 10px 0px;
+    height: 30px;
+    padding: 10px;
+    color: #000;
+    border: 1px solid #C6C6C6;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+}
+
+.floating-label {
+    position: absolute;
+    pointer-events: none;
+    left: 3px;
+    top: 15px;
+    transition: 0.2s ease all;
+    font-size: 13px;
+    font-weight: 600;
+    color: #C6C6C6;
+    background: #fff;
+    height: 16px;
+    padding: 0px 6px;
+}
+.input-div-top {
+    position: relative;
+    width: 100%;
+    float: left;
+}
+.err-icon i, .err-pass i, .err-name i, .err-cpass i, .err-url i {
+    position: absolute;
+    right: -32px;
+    top: 16px;
+    font-size: 17px;
+    color: #C6C6C6;
+}
+.table th, .table td {
+    border: 1px solid #ccc !important;
+}
+select.selectVal {
+    width: 100%;
+    float: left;
+    margin: 10px 0px;
+    height: 30px;
+    color: #C6C6C6;
+    border: 1px solid #C6C6C6;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    background: #fff;
+}
+select.selectVal option {
+    color: #000;
+}
+.back-arrow {
+    position: absolute;
+    top: 37px;
+    font-size: 26px;
+    line-height: 0px;
+    left: -21%;
+    color: #707071;
+    text-decoration: none;
+}
+.back-arrow:hover, .back-arrow:focus {
+    border: none;
+    text-decoration: none;
+    color: #707070;
+}
+@media screen and (max-width:1024px){
+    .navbar-default .container {
+    width: 100%;
+}
+.table-body {
+    width: 100%;
+    float: left;
+    overflow: auto;
+}
+}
+@media screen and (max-width:767px){
+.err-icon i, .err-pass i, .err-name i, .err-cpass i, .err-url i {
+    right: 10px;
+}
+.back-arrow {
+    top: 15px;
+    font-size: 26px;
+    left: 6px;
+}
+}
+.reset-notification h4 {
+    background: red;
+    text-align: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    margin-top: -27px;
+    margin-left: 8px; 
+}
