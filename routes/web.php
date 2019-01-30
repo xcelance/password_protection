@@ -11,34 +11,44 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Clear Cache facade value:
+Route::get('/clear', function() {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:cache');
+    return '<h1>Cleared</h1>';
 });
 
-Route::get('/test', function () {
-    return view('auth.test');
-});
+Route::get('/', 'UserController@index');
 
-Auth::routes();
+Route::post('/mylogin', 'UserController@login');
+Route::get('/logout', 'UserController@logout');
+Route::get('/sendMail/{email}', 'UserController@sendMail');
+
+Route::get('/test', 'UserController@test');
+Route::get('/view-newmail/{id}', 'UserController@viewMailHtml');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/reset-password', 'AdminController@getReset');
-Route::post('/new-password', 'AdminController@resetPassword');
+Route::get('/password/reset/expired', 'UserController@expiredToken');
+
+Route::get('/password/reset', 'UserController@getReset');
+Route::post('password/reset', 'UserController@sendResetLinkEmail');
+
+Route::get('password/reset/{token}', 'UserController@checkForUrl');
+Route::post('/password/update/{token}', 'UserController@createNewPassword');
 
 Route::middleware(['admin'])->group(function() {
-	// test routes
-	Route::get('/admin', function () {
-	    return view('admin.test');
-	});
 
 	Route::get('/dashboard', 'AdminController@index');
 
+	Route::get('/edit-error', 'AdminController@viewError');
+	Route::post('/edit-errors', 'AdminController@editError');
+
 	Route::get('/notification', 'AdminController@notification');
 	Route::get('/getnotification', 'AdminController@getnotification');
-
-	Route::get('/generate-password', 'AdminController@createPassword');
-	Route::post('/generate-password', 'AdminController@generatePassword');
 
 	Route::get('/view-admin', 'AdminController@adminEdit');
 	Route::post('/edit-admin/{id}', 'AdminController@updateAdmin');

@@ -2,7 +2,17 @@
 
 @section('content')
 
-
+	@if (session()->has('error1'))
+        <section class="error-msg-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p><i class="fas fa-exclamation-triangle"></i> <?php echo session()->get('error1') ?>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>                    
+    @endif
 
 	<section class="section-header">
 		<div class="container">
@@ -10,22 +20,6 @@
 	        	<div class="col-sm-3"></div>
 	            <div class="col-sm-6">
 	            	<h2 class="header-ttl">Add Url</h2>
-
-	            	@if (session()->has('success1'))
-                        <div class="alert alert-success">
-                          	<strong>Success!</strong> <?php echo session()->get('success1') ?>
-                        </div>                     
-                    @endif
-                    @if (session()->has('warning1'))
-                        <div class="alert alert-warning">
-                          	<strong>Warning!</strong> <?php echo session()->get('warning1') ?>
-                        </div>                     
-                    @endif
-                    @if (session()->has('error1'))
-                        <div class="alert alert-danger">
-                          	<strong>Error!</strong> <?php echo session()->get('error1') ?>
-                        </div>                     
-                    @endif
 
                     <form class="form-horizontal" action="{{ url('/add-url') }}" method="post">
 	                	{{ csrf_field() }}

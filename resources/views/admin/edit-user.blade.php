@@ -2,26 +2,36 @@
 
 @section('content')
 
+	@if (session()->has('error'))
+        <section class="error-msg-sec">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p><i class="fas fa-exclamation-triangle"></i> <?php echo session()->get('error') ?>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>                   
+    @endif
+
+    <section class="error-msg-sec error-messages hide">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p><i class="fas fa-exclamation-triangle"></i> {{ $error->text }}.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
 	<section class="section-header">
 		<div class="container">
 	    	<div class="row">
 	        	<div class="col-sm-3"></div>
 	            <div class="col-sm-6">
-	            	<h2 class="header-ttl">Edit User {{ ucwords($user->name) }}</h2>
-
-
-                    @if (session()->has('success'))
-                        <div class="alert alert-success">
-                          	<?php echo session()->get('success') ?>
-                        </div>                     
-                    @endif
-                    @if (session()->has('error'))
-                        <div class="alert alert-danger">
-                          	<?php echo session()->get('error') ?>
-                        </div>                     
-                    @endif
+	            	<h2 class="header-ttl">Edit {{ ucwords($user->name) }}</h2>            
 	                
-	                <form class="form-horizontal" action="{{ url('/edit-user').'/'.base64_encode($user->id) }}" method="post">
+	                <form class="form-horizontal" action="{{ url('/edit-user').'/'.base64_encode($user->id) }}" method="post" autocomplete="false">
 	                	{{ csrf_field() }}
 
 		                <div class="row">
@@ -38,7 +48,7 @@
 								</div>
 
 								<div class="input-div-top">
-								  	<input id="edit-email" type="text" class="inputText" value="{{ $user->email }}" name="email" required/>
+								  	<input id="edit-email" autocomplete="false" type="text" class="inputText" value="{{ $user->email }}" name="mail" required/>
 								  	<span class="floating-label">E-mail Address</span>
 								  	<div class="err-icon">
 								  		@if ($errors->has('email'))
@@ -48,7 +58,7 @@
 								</div>
 
 								<div class="input-div-top">
-								  	<input id="edit-pass" type="text" class="inputText" value="{{ base64_decode($user->password_show) }}" name="password"/>
+								  	<input id="edit-pass" type="text" class="inputText" value="{{ base64_decode($user->password_show) }}" name="passwrd"/>
 								  	<span class="floating-label">Password</span>
 								  	<div class="err-pass">
 								  		@if ($errors->has('password'))

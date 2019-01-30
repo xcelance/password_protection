@@ -16,4 +16,9 @@
 
         @include('partials.footer')
     </body>
+    <script type="text/javascript">
+       /* window.addEventListener("beforeunload", function(e){
+            debugger;
+        }, false);*/
+    </script>
 </html>

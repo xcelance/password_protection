@@ -41,11 +41,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'sharethisride.com.mysql.service.one.com'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'instantPassPdb'),
-            'username' => env('DB_USERNAME', 'instantPassPdb'),
-            'password' => env('DB_PASSWORD', 'jbJ)o1nJB9^hv12'),
+            'database' => env('DB_DATABASE', 'sharethisride_com_instant_pass'),
+            'username' => env('DB_USERNAME', 'sharethisride_com_instant_pass'),
+            'password' => env('DB_PASSWORD', 'NDGpGFkEq67VtTSgZQBqe4Xx'),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',

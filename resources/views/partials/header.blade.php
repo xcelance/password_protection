@@ -12,7 +12,7 @@
 
             <!-- Branding Image -->
             <a class="navbar-brand" href="{{ url('/') }}">
-                LOGO
+                ShareThisRide
             </a>
             <p class="main-url hide">{{ url('/') }}</p>
         </div>
@@ -27,15 +27,15 @@
             <ul class="nav navbar-nav navbar-right">
                 <!-- Authentication Links -->
                 @if (Auth::guest())
-                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ url('/') }}">Admin Login</a></li>
                 @else
 
                     @if(Auth::user()->role == "0") 
                         <li {{ Request::is('users') ? ' class=active' : null }}><a href="{{ url('/users') }}">Users</a></li>
                         <li {{ Request::is('create-user') ? ' class=active' : null }}><a href="{{ url('/create-user') }}">Create User</a></li>
                         <li {{ Request::is('urls') ? ' class=active' : null }}><a href="{{ url('/urls') }}">Urls</a></li>
-                        <li {{ Request::is('generate-password') ? ' class=active' : null }}><a href="{{ url('/generate-password') }}">Generate Password</a></li>
-                        <li {{ Request::is('notification') ? ' class=active' : null }}><a href="{{ url('/notification') }}"><i class="fas fa-globe-americas get-notification"><h4></h4></i></a></li>
+                        <!-- <li {{ Request::is('generate-password') ? ' class=active' : null }}><a href="{{ url('/generate-password') }}">Generate Password</a></li> -->
+                        <!-- <li {{ Request::is('notification') ? ' class=active' : null }}><a href="{{ url('/notification') }}"><i class="fas fa-globe-americas get-notification"><h4></h4></i></a></li> -->
                     @endif
 
                     <li class="dropdown">
@@ -47,16 +47,15 @@
 
                             @if(Auth::user()->role == "0") 
                                 <li {{ Request::is('view-admin') ? ' class=active' : null }}><a href="{{ url('/view-admin') }}">Admin</a></li>
+                                <li {{ Request::is('edit-error') ? ' class=active' : null }}><a href="{{ url('/edit-error') }}">Error Message</a></li>
                             @endif
 
                             <li>
-                                <a href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
+                                <a href="{{ url('logout') }}" >
                                     Logout
                                 </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                <form id="logout-form" action="{{ url('logout') }}" method="POST" style="display: none;">
                                     {{ csrf_field() }}
                                 </form>
                             </li>

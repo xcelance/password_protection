@@ -44,8 +44,8 @@
 
                 <div class="col-sm-6 @if (session()->has('success')) hide @endif">
 
-                    <h2 class="header-ttl">Forgot your password?</h2>
-                    <p class="header-txt">We will send you an email with your password when we see your request. Please make sure to enter the correct information in the field below.</p>
+                    <h2 class="header-ttl">Sorry, the link you clicked on has expired.</h2>
+                    <p class="header-txt">Please enter your e-mail address below and we will send you a new link by e-mail.</p>
 
                     <form class="form-horizontal" method="POST" action="{{ url('/password/reset') }}">
                         {{ csrf_field() }}

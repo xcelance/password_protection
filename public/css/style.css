@@ -119,10 +119,6 @@ body{
     font-weight: 600;
     transition: 0.4s all ease-in-out;
 }
-.btn-login:hover {
-    border: 1px solid #707070;
-    background: #707070;
-}
 .forgot-txt {
     text-align: center;
     clear: both;
@@ -146,10 +142,9 @@ body{
     color: #f10c0c;
 }
 
-.navbar-default .container {
-width: 1200px;
+.navbar-default .container, .error-msg-sec .container {
+    width: 1200px;
 }
-
 input:focus ~ .floating-label, input:not(:focus):valid ~ .floating-label {
     top: 0px;
     bottom: 10px;
@@ -204,7 +199,7 @@ select.selectVal {
     float: left;
     margin: 10px 0px;
     height: 30px;
-    color: #C6C6C6;
+    color: #000;
     border: 1px solid #C6C6C6;
     font-size: 14px;
     font-weight: 600;
@@ -228,8 +223,36 @@ select.selectVal option {
     text-decoration: none;
     color: #707070;
 }
+.users-heading {
+    margin: 4px 0px 20px 0px;
+}
+.search-field input {
+    margin-bottom: 0px;
+}
+.error-msg-sec {
+    width: 100%;
+    float: left;
+    background: #7C7C7C;
+    padding: 7px 0px 10px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.error-msg-sec p {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 0px;
+}
+.error-msg-sec p i {
+    margin-right: 50px;
+    font-size: 18px;
+    position: relative;
+    top: 2px;
+}
+nav.navbar.navbar-default.navbar-static-top {
+    margin-bottom: 0px;
+}
 @media screen and (max-width:1024px){
-    .navbar-default .container {
+.navbar-default .container, .error-msg-sec .container {
     width: 100%;
 }
 .table-body {
@@ -247,6 +270,27 @@ select.selectVal option {
     font-size: 26px;
     left: 6px;
 }
+.error-msg-sec p i {
+margin-right: 0px;
+width: 100%;
+}
+.view_mail button {
+    width: 100% !important;
+}
+pre {
+    white-space: pre-wrap;
+    white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+}
+hr{
+    width: 100% !important;
+}
 }
 .reset-notification h4 {
     background: red;
@@ -258,4 +302,7 @@ select.selectVal option {
     font-size: 16px;
     margin-top: -27px;
     margin-left: 8px; 
+}
+.disabled {
+    background: #eaeaea;
 }

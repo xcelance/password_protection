@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@sharethisride.com'),
+        'name' => env('MAIL_FROM_NAME', 'ShareThisRide'),
     ],
 
     /*
@@ -90,6 +90,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Sendmail System Path
+    |--------------------------------------------------------------------------
+    |
+    | When using the "sendmail" driver to send e-mails, we will need to know
+    | the path to where Sendmail lives on this server. A default path has
+    | been provided here, which will work well on most of your systems.
+    |
+    */
+
+    'sendmail' => '/usr/sbin/sendmail -bs',
+
+    /*
+    |--------------------------------------------------------------------------
     | Markdown Mail Settings
     |--------------------------------------------------------------------------
     |
@@ -104,6 +117,14 @@ return [
 
         'paths' => [
             resource_path('views/vendor/mail'),
+        ],
+    ],
+
+    'stream' => [
+        'ssl' => [
+            'allow_self_signed' => true,
+            'verify_peer' => false,
+            'verify_peer_name' => false,
         ],
     ],
 
