@@ -28,13 +28,16 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = '/home';
-    public function redirectTo()
-    {
+    public function redirectTo() {
         if(Auth::user()->active == "0") {
             if (Auth::user()->role == "0") {
                 return '/users';
-            } else {
-                return Auth::user()->url;
+            } else { 
+                $url = Auth::user()->url;
+                Auth::logout();
+                ?>
+                    <script> window.location.href = "<?php echo $url;?>"; </script>
+                <?php 
             }
         } else {
             Auth::logout();

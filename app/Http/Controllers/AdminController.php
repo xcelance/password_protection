@@ -10,6 +10,7 @@ use Auth;
 use Mail;
 use App\User;
 use App\Urls;
+use App\Error;
 use App\Reset;
 use Session;
 
@@ -30,9 +31,10 @@ class AdminController extends Controller
      * @return void
      */
     public function adminEdit() {
-
         $admin = User::where('id', Auth::user()->id)->where('role', '0')->first();
-        return view('admin.admin-details')->with('admin', $admin);
+        $error = Error::first();
+
+        return view('admin.admin-details')->with('admin', $admin)->with('error', $error);
     }
 
     /**
@@ -42,6 +44,9 @@ class AdminController extends Controller
      */
     public function updateAdmin(Request $request, $a_id) {
         $id = base64_decode($a_id);
+        
+        $request['password'] = $request['passwrd'];
+        $request['email'] = $request['mail'];
 
         if($request['password'] == "") {
             $rules = [
@@ -59,29 +64,37 @@ class AdminController extends Controller
         $validator = Validator::make(Input::all(), $rules);
 
         $admin = User::where('id', $id); 
+        $error = Error::first();
 
         if ($validator->fails()) {
-           $errors = $validator->errors(); 
+           $errors = $validator->errors();
+            Session::flash('error', $error->text);
            return redirect()->back()->withErrors($errors)->withInput();
         }
 
         if(User::where('id', $id)->where('email', $request['email'])->count() > 0) {
             $admin->update([ 'name' => $request['name'] ]);
-            if(!empty($request['password'])) {
-                $password = bcrypt($request['password']);
-                $admin->update([ 'password' => $password ]);
+            if(!empty($request['password']) && !empty($request['password_confirmation'])) {
+                if($request['password'] == $request['password_confirmation']) {
+                    $password = bcrypt($request['password']);
+                    $password_show = base64_encode($request['password']);
+                    $admin->update([ 'password' => $password, 'password_show' => $password_show ]);
+                }
             }
             Session::flash('success', 'Admin updated sucessfully.');
             return redirect()->back();
         } else {
             if(User::where('email', $request['email'])->count() > 0) {
-                Session::flash('warning', 'Email has already been taken.');
+                Session::flash('error', $error->text);
                 return redirect()->back();
             } else { 
                 $admin->update([ 'name' => $request['name'], 'email' => $request['email'] ]);
-                if(!empty($request['password'])) {
-                    $password = bcrypt($request['password']);
-                    $admin->update([ 'password' => $password ]);
+                if(!empty($request['password']) && !empty($request['password_confirmation'])) {
+                    if($request['password'] == $request['password_confirmation']) {
+                        $password = bcrypt($request['password']);
+                        $password_show = base64_encode($request['password']);
+                        $admin->update([ 'password' => $password, 'password_show' => $password_show ]);
+                    }
                 }
 
                 Session::flash('success', 'Admin updated sucessfully.');
@@ -92,7 +105,7 @@ class AdminController extends Controller
     }
 
     /**
-     * View create User page.
+     * activate or deactivate user.
      *
      * @return void
      */
@@ -102,7 +115,7 @@ class AdminController extends Controller
         if(User::where('id', $id)->where('active', '0')->count() > 0) {
             // deactivate user
             User::where('id', $id)->update([ 'active' => '1' ]);
-            Session::flash('success', 'User is deactivated.');
+            Session::flash('warning', 'User is deactivated.');
         } else {
             // activate user
             User::where('id', $id)->update([ 'active' => '0' ]);
@@ -120,7 +133,9 @@ class AdminController extends Controller
     public function addUser() {
 
         $urls = Urls::all();
-    	return view('admin.create-user')->with('urls', $urls);
+        $error = Error::first();
+
+    	return view('admin.create-user')->with('urls', $urls)->with('error', $error);
     }
 
     /**
@@ -129,6 +144,10 @@ class AdminController extends Controller
      * @return void
      */
     public function createUser(Request $request) {
+
+        $request['password'] = $request['passwrd'];
+        $request['email'] = $request['mail'];
+
     	$rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:63|unique:users',
@@ -137,9 +156,11 @@ class AdminController extends Controller
         ];
 
         $validator = Validator::make(Input::all(), $rules);
+        $error = Error::first();
 
         if ($validator->fails()) {
-           $errors = $validator->errors(); 
+           $errors = $validator->errors();
+           Session::flash('error', $error->text); 
            return redirect()->back()->withErrors($errors)->withInput();
         }
 
@@ -155,7 +176,7 @@ class AdminController extends Controller
 			Session::flash('success', 'New user created sucessfully.');
             return redirect()->back();
         } else {
-        	Session::flash('error', 'Unable to create new user.');
+        	Session::flash('error', $error->text);
             return redirect()->back();
         }
     }
@@ -166,7 +187,7 @@ class AdminController extends Controller
      * @return void
      */
     public function users() {
-    	$users = User::where('role', '!=', '0')->paginate(200);
+    	$users = User::where('role', '!=', '0')->get();
     	return view('admin.users')->with('users', $users);
     }
 
@@ -178,11 +199,13 @@ class AdminController extends Controller
     public function deleteUser($u_id) {
         $id = base64_decode($u_id);
 
+        $error = Error::first();
+
     	if(User::where('id', $id)->delete()) {
     		Session::flash('success', 'User deleted sucessfully.');
             return redirect()->back();
     	} else {
-    		Session::flash('error', 'Something went wrong while deleting user.');
+    		Session::flash('error', $error->text);
             return redirect()->back();
     	}
     }
@@ -194,10 +217,11 @@ class AdminController extends Controller
      */
     public function editUser($u_id) {
         $id = base64_decode($u_id);
-
+        $error = Error::first();
         $urls = Urls::all();
     	$user = User::where('id', $id)->first();
-    	return view('admin.edit-user')->with('user', $user)->with('urls', $urls);
+        
+    	return view('admin.edit-user')->with('user', $user)->with('urls', $urls)->with('error', $error);
     }
 
     /**
@@ -207,6 +231,9 @@ class AdminController extends Controller
      */
     public function updateUser(Request $request, $u_id) {
         $id = base64_decode($u_id);
+
+        $request['password'] = $request['passwrd'];
+        $request['email'] = $request['mail'];
 
     	if($request['password'] == "" || $request['password_confirmation'] == "") {
 	    	$rules = [
@@ -226,9 +253,11 @@ class AdminController extends Controller
         $validator = Validator::make(Input::all(), $rules);
 
         $current_user = User::where('id', $id); 
+        $error = Error::first();
 
         if ($validator->fails()) {
            $errors = $validator->errors(); 
+           Session::flash('error', $error->text);
            return redirect()->back()->withErrors($errors)->withInput();
         }
 
@@ -245,7 +274,7 @@ class AdminController extends Controller
         	return redirect()->back();
         } else {
         	if(User::where('email', $request['email'])->count() > 0) {
-        		Session::flash('error', 'Email has already been taken.');
+        		Session::flash('error', $error->text);
         		return redirect()->back();
         	} else { 
         		$current_user->update([ 'name' => $request['name'], 'url' => $request['url'], 'email' => $request['email'] ]);
@@ -283,9 +312,10 @@ class AdminController extends Controller
      * @return void
      */
     public function addUrl(Request $request) {
+        $error = Error::first();
 
     	if(Urls::where('url', $request['url'])->count() > 0) {
-    		Session::flash('warning1', 'Url already exists.');
+    		Session::flash('error1', $error->text);
         	return redirect()->back();
     	} else {
 
@@ -297,7 +327,7 @@ class AdminController extends Controller
 	    		Session::flash('success1', 'User updated sucessfully.');
 	        	return redirect()->back();
 	        } else {
-	        	Session::flash('error1', 'Url already exists.');
+	        	Session::flash('error1', $error->text);
         		return redirect()->back();
 	        }
     	}
@@ -311,76 +341,16 @@ class AdminController extends Controller
      */
     public function deleteUrl($Uid) {
         $id = base64_decode($Uid);
+        $error = Error::first();
 
         if(Urls::where('id', $id)->delete()) {
             Session::flash('success', 'Url deleted sucessfully.');
             return redirect()->back();
         } else {
-            Session::flash('error', 'Something went wrong while deleting url.');
+            Session::flash('error', $error->text);
             return redirect()->back();
         }
 
-    }
-
-    /**
-     * get reset Url
-     *
-     * @return void
-     */
-    public function getReset() {
-        return view('auth.passwords.email');
-    }
-
-    /**
-     * send reset password Url
-     *
-     * @return void
-     */
-    public function resetPassword(Request $request) { 
-        $rules = [
-            'email' => 'required|email|max:63',
-        ];
-
-        $validator = Validator::make(Input::all(), $rules);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors(); 
-            return redirect()->back()->withErrors($errors)->withInput();
-        }
-
-        if(User::where('email', $request['email'])->count() > 0) {
-            $data = array( 'email' => $request['email'], 'status' => "reset");
-            if(Reset::where('email', $request['email'])->count() > 0) {
-                // already exists
-                Session::flash('error', 'No user has been registered with this email.');
-                return redirect()->back();
-            } else {
-                // create reset value
-                $reset = new Reset;
-
-                $reset->email = $request['email'];
-                if($reset->save()) {
-                    // send mails
-                    Mail::send('emails.reset', $data, function($message) use ($data) {
-                        $message->from($data['email']);
-                        $message->to('no-reply@sharethisride.com')->subject('ShareThisRide: Forgotten Password');
-                    });
-
-                    // unable to create notification
-                    Session::flash('success', 'Request has been sent.');
-                    return redirect()->back();
-                } else {
-                    // unable to create notification
-                    Session::flash('error', 'Unable to create request.');
-                    return redirect()->back();
-                }
-            }
-
-        } else {
-            // not user with this mail
-            Session::flash('error', 'No user has been registered with this email.');
-            return redirect()->back();
-        }
     }
 
     /**
@@ -404,9 +374,11 @@ class AdminController extends Controller
         ];
 
         $validator = Validator::make(Input::all(), $rules);
+        $error = Error::first();
 
         if ($validator->fails()) {
             $errors = $validator->errors(); 
+            Session::flash('error', $error->text);
             return redirect()->back()->withErrors($errors)->withInput();
         }
 
@@ -438,12 +410,12 @@ class AdminController extends Controller
                 return redirect()->back();
             } else {
                 // not user with this mail
-                Session::flash('error', 'No user has been registered with this email.');
+                Session::flash('error', $error->text);
                 return redirect()->back();
             }
         } else {
             // not user with this mail
-            Session::flash('error', 'No such user called for password reset request..');
+            Session::flash('error', $error->text);
             return redirect()->back();
         }
     }
@@ -469,6 +441,37 @@ class AdminController extends Controller
      */
     public function getnotification() {
         echo $notifications = Reset::where('status', '0')->count();
+    }
+
+    /**
+     * get notification
+     *
+     * @return void
+     */
+    public function viewError() {
+        $error = Error::where('type', 'Error')->first();
+        $perror = Error::where('type', 'Password Error')->first();
+        $lerror = Error::where('type', 'Login Error')->first();
+        $teerror = Error::where('type', 'Token Expired Error')->first();
+
+        return view('admin.error')->with('error', $error)->with('perror', $perror)->with('lerror', $lerror)->with('teerror', $teerror);
+    }
+
+    /**
+     * get notification
+     *
+     * @return void
+     */
+    public function editError(Request $request) {
+        $error = Error::where('type', 'Error')->first();
+
+        Error::where('type', 'Error')->update( ['text' => $request['error'] ]);
+        Error::where('type', 'Password Error')->update( ['text' => $request['password_error'] ]);
+        Error::where('type', 'Login Error')->update( ['text' => $request['login_error'] ]);
+        Error::where('type', 'Token Expired Error')->update( ['text' => $request['tokenex_error'] ]);
+
+        Session::flash('success', 'error messages has been updated.');
+        return redirect()->back();
     }
 
 }

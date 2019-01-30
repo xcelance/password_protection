@@ -25,4 +25,14 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /**
+     * Show main page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function main()
+    {
+        return view('welcome');
+    }
 }
